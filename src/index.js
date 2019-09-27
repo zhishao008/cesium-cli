@@ -6,7 +6,6 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import App from "./app";
 import Cesium from "./component/cesium";
-import HiddenDangers from "./component/hiddenDangers/index";
 import { createBrowserHistory } from 'history';
 import 'cesium/Widgets/widgets.css';
 import 'antd/dist/antd.css';
@@ -25,6 +24,5 @@ ReactDOM.render(<BrowserRouter>
   <Switch>
     <Route exact path="/" component={Cesium} />
     <Route path='/app' component={App} />
-    <Route path='/hidden' component={HiddenDangers} />
   </Switch>
 </BrowserRouter>, document.getElementById("root"));
