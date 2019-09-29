@@ -1,4 +1,4 @@
-import Cesium from 'cesium/Cesium';
+import Cesium from "cesium/Cesium";
 class CesiumApp {
   //创建
   createCesium(name) {
