@@ -3,13 +3,15 @@ const path = require("path");
 const BUILD_PATH = path.resolve(__dirname, "./dist");
 
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-
 // const ExtractTextPlugin = require("extract-text-webpack-plugin");  webpack4以下用
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");  //webpack4以上使用
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const cesiumSource = 'node_modules/cesium/Source';
 const cesiumWorkers = '../Build/Cesium/Workers';
 const CopywebpackPlugin = require('copy-webpack-plugin');
+
+console.log('current mode = ' + process.env.NODE_ENV);
+
 module.exports = {
   //devtools:"source-map",
   entry: {
@@ -33,6 +35,7 @@ module.exports = {
     // 解决fs模块的问题（Resolve node module use of fs）
     fs: 'empty'
   },
+  // 定义模块规则
   module: {
     rules: [
       // {
@@ -45,7 +48,7 @@ module.exports = {
       //     }
       // },
       {
-        test: /\.(js|jsx)$/, //以js结尾的文件
+        test: /\.(js|jsx)$/, //以js jsx结尾的文件
         //loader:"babel-loader", //用babel-loader处理  es6语法
         exclude: /node_modules/, //处理node_modules的内容（已经处理过的文件就不再处理） 
         //include:path.resolve(__dirname,"src"),  //打包的范围（src文件夹里面的内容需要打包）
@@ -62,7 +65,7 @@ module.exports = {
         test: /\.css$/,
         use: [
           "style-loader",
-          MiniCssExtractPlugin.loader,
+          process.env.NODE_ENV === "production" ? MiniCssExtractPlugin.loader : "style-loader",
           "css-loader"
         ]
       },
@@ -100,31 +103,27 @@ module.exports = {
       // }
     ]
   },
+  // 引入资源省略后缀、资源别名配置
   resolve: {
     alias: {
       // Cesium模块名称
-      cesium: path.resolve(__dirname, cesiumSource)
+      cesium: path.resolve(__dirname, cesiumSource),
+      '@': path.resolve('../src')
     },
-    extensions: [".js", ".jsx", ".json"]  //定义了解析模块时候的配置，可以指定模块的后缀，这样在引入的时候可以不需要写后缀，第一个参数为 "" 或者不写
+    extensions: [".js", ".jsx", ".json", 'css', 'less']  //定义了解析模块时候的配置，可以指定模块的后缀，这样在引入的时候可以不需要写后缀，第一个参数为 "" 或者不写
   },
   plugins: [
     //["import", { libraryName: "antd", style: "css" }], // `style: true` 会加载 less 文件
-    new CleanWebpackPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
+    new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: ['**/*']
+    }),
     new HtmlWebpackPlugin({
       chunk: ["bundle"],
       title: "bundle1",
-      //filename: "index.html",  //可以设置HTML输出的路径和文件名
+      filename: "index.html",  //可以设置HTML输出的路径和文件名
       template: "./template/index.html",  //可以设置哪个index.html为模板
       hash: true
     }),
-    new MiniCssExtractPlugin({
-      filename: "./css/[name].[chunkhash:8].css",
-      chunkFilename: "[id].css"
-    }),
-    // new HtmlWebpackPlugin({
-    //     template: 'src/index.html'
-    // }), 
     new CopywebpackPlugin([{ from: path.join(cesiumSource, cesiumWorkers), to: 'Workers' }]),
     new CopywebpackPlugin([{ from: path.join(cesiumSource, 'Assets'), to: 'Assets' }]),
     new CopywebpackPlugin([{ from: path.join(cesiumSource, 'Widgets'), to: 'Widgets' }]),

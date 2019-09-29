@@ -1,6 +1,7 @@
 const merge = require('webpack-merge');
 const common = require('./webpack.base.config');
 const path = require('path');
+const webpack = require('webpack');
 module.exports = merge(common, {
   mode: 'development',
   devtool: 'inline-source-map',
@@ -12,6 +13,9 @@ module.exports = merge(common, {
     port: 3000,
     open: true, //自动打开浏览器
     hot: true,  //热更新
-    compress: true  //开启gzip  会压缩代码
+    //compress: true  //开启gzip  会压缩代码
   },
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+  ]
 });
