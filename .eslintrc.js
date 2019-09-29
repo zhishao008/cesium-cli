@@ -7,6 +7,7 @@
 // - globals       声明在代码中的自定义全局变量
 // - parserOptions 设置解析器选项
 module.exports = {
+  root: true,
   "env": {
     "browser": true,
     "es6": true
@@ -34,7 +35,8 @@ module.exports = {
     "indent": ["error", 2],
     "quotes": ["error", "double"], //强制使用双引号
     "semi": ["error", "always"],
-    "no-console": process.env.NODE_ENV === 'production' ? 2 : 1,
-    "no-unused-vars": process.env.NODE_ENV === 'production' ? ["error"] : ["warn"]
+    "no-console": process.env.NODE_ENV === 'production' ? 1 : 1,
+    "no-unused-vars": process.env.NODE_ENV === 'production' ? ["warn"] : ["warn"],
+    "no-restricted-modules": ["warn"]
   }
 };
