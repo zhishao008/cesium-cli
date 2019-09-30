@@ -33,7 +33,7 @@ module.exports = {
   "rules": {
     "no-debugger": process.env.NODE_ENV === 'production' ? 2 : 1,
     "indent": ["error", 2],
-    "quotes": ["error", "double"], //强制使用双引号
+    "quotes": ["warn", "double"], //强制使用双引号
     "semi": ["error", "always"],
     "no-console": process.env.NODE_ENV === 'production' ? 1 : 1,
     "no-unused-vars": process.env.NODE_ENV === 'production' ? ["warn"] : ["warn"],

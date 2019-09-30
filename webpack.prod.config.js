@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-// const webpack = require("webpack");
+const webpack = require("webpack");
 // const path = require("path");
 const merge = require("webpack-merge");
 const common = require("./webpack.base.config");
@@ -24,6 +24,10 @@ module.exports = merge(common, {
           "react"
         ]
       }
+    }),
+    new webpack.DllReferencePlugin({
+      context: __dirname,
+      manifest: require("./manifest.json")
     }),
     new UglifyJsPlugin({
       test: /\.js($|\?)/i,

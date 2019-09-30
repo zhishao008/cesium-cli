@@ -13,7 +13,7 @@ export default class Cesium extends Component {
   }
   render() {
     return <div>
-      <div id="cesiumContainer">12</div>
+      <div id="cesiumContainer"></div>
       <hr />
       <Button type="primary" onClick={this.FuncCesium}>Primary</Button>
     </div>;

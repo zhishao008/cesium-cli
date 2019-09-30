@@ -19,3 +19,7 @@ uglifyjs-webpack-plugin：压缩js文件
 使用chunk  
 
 减小bundle的大小 
+
+每次打包的时候dist 目录不会自动删除
+
+将logic层打包成单独的js

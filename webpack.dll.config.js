@@ -4,7 +4,7 @@ const path = require("path");
 
 module.exports = {
   entry: {
-    venders: ["react", "react-dom", "react-router-dom"]
+    venders: ["react", "react-dom", "react-router-dom", "antd"]
   },
   output: {
     filename: './dist/js/[name].js',

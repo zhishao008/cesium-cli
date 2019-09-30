@@ -8,8 +8,7 @@ import App from "./app";
 import Cesium from "./component/cesium";
 import { createBrowserHistory } from "history";
 import "cesium/Widgets/widgets.css";
-import "antd/dist/antd.css";
-
+// import printMe from "./print.js";
 const history = createBrowserHistory();
 window.logger = {
   info: (v) => {

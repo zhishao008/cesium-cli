@@ -1,8 +1,6 @@
 /* eslint-disable */
 const webpack = require("webpack");
 const path = require("path");
-const BUILD_PATH = path.resolve(__dirname, "./dist");
-
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 // const ExtractTextPlugin = require("extract-text-webpack-plugin");  webpack4以下用
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");  //webpack4以上使用
@@ -15,17 +13,21 @@ console.log("current mode = " + process.env.NODE_ENV);
 
 module.exports = {
   entry: {
-    bundle: ["./src/index.js"]
+    //bundle: "./src/index.js",   //['./src/index.js']都支持
+    // vendors: './src'
+    print: "./src/print.js"
   },
   output: {
-    path: BUILD_PATH,
+    path: path.resolve(__dirname, "./dist"),
     filename: "./js/[name].[hash:8].js",
     chunkFilename: "./js/[name].[chunkhash].js",
     hotUpdateChunkFilename: "hot/hot-update.js",
     hotUpdateMainFilename: "hot/hot-update.json",
     publicPath: "/",
     //需要编译Cesium中的多行字符串 
-    sourcePrefix: ""
+    sourcePrefix: "",
+    library: "zhi",
+    // libraryTarget: "umd"
   },
   amd: {
     //允许Cesium兼容 webpack的require方式 
@@ -39,28 +41,28 @@ module.exports = {
     runtimeChunk: {
       name: 'manifest'
     },
-    // splitChunks: {
-    //   chunks: 'async',
-    //   minSize: 10000,
-    //   minChunks: 1,
-    //   maxAsyncRequests: 5,
-    //   maxInitialRequests: 3,
-    //   automaticNameDelimiter: '~',
-    //   name: true,
-    //   cacheGroups: {
-    //     vendors: {  // 抽离第三方插件
-    //       test: /[\\/]node_modules[\\/]/,     // 指定是node_modules下的第三方包
-    //       name: "vendors",
-    //       priority: -10                       // 抽取优先级
-    //     },
-    //     utilCommon: {   // 抽离自定义工具库
-    //       name: "common",
-    //       minSize: 0,     // 将引用模块分离成新代码文件的最小体积
-    //       minChunks: 2,   // 表示将引用模块如不同文件引用了多少次，才能分离生成新chunk
-    //       priority: -20
-    //     }
-    //   }
-    // }
+    splitChunks: {
+      chunks: 'async',
+      minSize: 10000,
+      minChunks: 1,
+      maxAsyncRequests: 5,
+      maxInitialRequests: 3,
+      automaticNameDelimiter: '~',
+      name: true,
+      cacheGroups: {
+        vendors: {  // 抽离第三方插件
+          test: /[\\/]node_modules[\\/]/,     // 指定是node_modules下的第三方包
+          name: "vendors",
+          priority: -10                       // 抽取优先级
+        },
+        utilCommon: {   // 抽离自定义工具库
+          name: "common",
+          minSize: 0,     // 将引用模块分离成新代码文件的最小体积
+          minChunks: 2,   // 表示将引用模块如不同文件引用了多少次，才能分离生成新chunk
+          priority: -20
+        }
+      }
+    }
   },
   // 定义模块规则
   module: {
@@ -144,24 +146,17 @@ module.exports = {
     extensions: [".js", ".jsx", ".json", "css", "less"]  //定义了解析模块时候的配置，可以指定模块的后缀，这样在引入的时候可以不需要写后缀，第一个参数为 "" 或者不写
   },
   plugins: [
-    //["import", { libraryName: "antd", style: "css" }], // `style: true` 会加载 less 文件
-    new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: ["dist"]
-    }),
+    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       chunk: ["bundle"],
       minify: { // 压缩HTML文件
         removeComments: true, // 移除HTML中的注释
-        collapseWhitespace: true, // 删除空白符与换行符
+        //collapseWhitespace: true, // 删除空白符与换行符
         minifyCSS: true// 压缩内联css
       },
       filename: "index.html",  //可以设置HTML输出的路径和文件名
       template: "./template/index.html",  //可以设置哪个index.html为模板
       hash: true
-    }),
-    new webpack.DllReferencePlugin({
-      context: __dirname,
-      manifest: require("./manifest.json")
     }),
     new CopywebpackPlugin([{ from: path.join(cesiumSource, cesiumWorkers), to: "Workers" }]),
     new CopywebpackPlugin([{ from: path.join(cesiumSource, "Assets"), to: "Assets" }]),
