@@ -13,9 +13,8 @@ console.log("current mode = " + process.env.NODE_ENV);
 
 module.exports = {
   entry: {
-    //bundle: "./src/index.js",   //['./src/index.js']都支持
+    bundle: "./src/index.js",   //['./src/index.js']都支持
     // vendors: './src'
-    print: "./src/print.js"
   },
   output: {
     path: path.resolve(__dirname, "./dist"),
@@ -26,7 +25,7 @@ module.exports = {
     publicPath: "/",
     //需要编译Cesium中的多行字符串 
     sourcePrefix: "",
-    library: "zhi",
+    // library: "util",
     // libraryTarget: "umd"
   },
   amd: {

@@ -15,7 +15,6 @@ module.exports = merge(common, {
     port: 3000,
     open: true, //自动打开浏览器
     hot: true,  //热更新
-    //compress: true  //开启gzip  会压缩代码
     proxy: {
       // '/': 'http://localhost:3000'
     }
